@@ -1,19 +1,35 @@
 const axios = require('axios');
 const cheerio = require('cheerio');
+const got = require('got');
+const _ = require('lodash');
 
-async function testFunc() {
-    const response = await axios.get(`https://jav.land/tw/id_search.php`, {
-        params: { keys: 'mide-932' }
-    });
+async function getContentID() {
+    // const response = await axios.get(`https://www.dmm.co.jp/search/=/searchstr=SSIS-129`, {
+    //     params: { anonymous: true },
+    //     headers: { 'User-Agent': 'Axios 0.21.1' }
+    // });
+    // const $ = cheerio.load(response.data);
+    // console.log($('a.play-btn').attr('href'));
 
-    const $ = cheerio.load(response.data);
-    const contentID = $('.table-hover tr:nth-child(1) td+ td').text();
-    const firstLetter = contentID[0];
-    const firstToThirdLetter = `${contentID[0]}${contentID[1]}${contentID[2]}`;
-    const previewVidPattern = `${contentID.match(/.+[a-z]+/g)}${contentID.match(/\d{3}$/g)}`;
-    const previewVidURL = `https://videos.vpdmm.cc/litevideo/freepv/${firstLetter}/${firstToThirdLetter}/${previewVidPattern}/${previewVidPattern}_dm_w.mp4`;
-    console.log(previewVidURL);
-    console.log(contentID);
+    (async () => {
+        try {
+            const response = await got('https://www.dmm.co.jp/search/=/searchstr=JUL-610', {
+                headers: {
+                    'user-agent': 'Android'
+                }
+            });
+            const $ = cheerio.load(response.body);
+            // console.log($('a.play-btn').attr('href'));
+            _.forEach($('a.play-btn'), function(value, key) {
+                console.log(value.attribs.href);
+            });
+
+            //=> '<!doctype html> ...'
+        } catch (error) {
+            console.log(error.response.body);
+            //=> 'Internal server error ...'
+        }
+    })();
 }
 
-testFunc();
+getContentID()

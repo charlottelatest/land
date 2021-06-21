@@ -10,6 +10,11 @@
   "license": "ISC",
   "dependencies": {
     "axios": "^0.21.1",
-    "cheerio": "^1.0.0-rc.10"
+    "casperjs": "^1.1.4",
+    "cheerio": "^1.0.0-rc.10",
+    "cloudscraper": "^4.6.0",
+    "got": "^11.8.2",
+    "lodash": "^4.17.21",
+    "phantomjs": "^2.1.7"
   }
 }
